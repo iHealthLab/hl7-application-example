@@ -6,6 +6,7 @@ import ca.uhn.hl7v2.hoh.hapi.api.MessageSendable;
 import ca.uhn.hl7v2.hoh.hapi.client.HohClientSimple;
 import ca.uhn.hl7v2.hoh.sockets.TlsSocketFactory;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.v28.message.OMG_O19;
 import ca.uhn.hl7v2.model.v28.message.REF_I12;
 import ca.uhn.hl7v2.model.v28.segment.IN1;
 import ca.uhn.hl7v2.parser.Parser;
@@ -17,7 +18,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-public class SendPatient {
+public class SendOrder {
     public static void send(String url, int port, String username, String password) throws Exception {
         String uri = "/hl7/servlet";
         Parser parser = PipeParser.getInstanceWithNoValidation();
@@ -40,44 +41,40 @@ public class SendPatient {
         IAuthorizationClientCallback authCallback = new SingleCredentialClientCallback(username, password);
         client.setAuthorizationCallback(authCallback);
 
-        REF_I12 refMsg = new REF_I12();
+        OMG_O19 omgMsg = new OMG_O19();
+        omgMsg.initQuickstart("OMG","O19","");
+        omgMsg.getPATIENT().getPID().getSetIDPID().setValue("1");
 
-        refMsg.initQuickstart("REF", "I12", "processingId");
+        omgMsg.getORDER().getORC().getOrc1_OrderControl().setValue("NW");
+        omgMsg.getORDER().getORC().getPlacerOrderNumber().getEntityIdentifier().setValue("RQ101");
+        omgMsg.getORDER().getORC().getPlacerOrderNumber().getNamespaceID().setValue("ORSUPPLY");
+        omgMsg.getORDER().getORC().getOrderStatus().setValue("N");
+        omgMsg.getORDER().getORC().getOrderType().getText().setValue("type");
+        omgMsg.getORDER().getORC().getDateTimeOfTransaction().setValue("20210917130000");
 
-        // auth
-//        String auth = "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzAzOTI0MTUsInVzZXIiOiJhcHAxIiwiaWF0IjoxNjI5Nzg3NjE1fQ.nXne1WPu0WBRV-6yAk6mejZONsOM49UtnVuFi2UoJhjLg7UXeMsxq62QCBhssRA1d-DBXLNIHs23Ckg6CbTr2g";
-//        refMsg.getUAC().getUserAuthenticationCredential().getData().setValue(auth);
-
-        // patient id
-        refMsg.getPID().getSetIDPID().setValue("1");
+        omgMsg.getORDER().getTIMING().getTQ1().getSetIDTQ1().setValue("0");
+        omgMsg.getORDER().getOBR().getSetIDOBR().setValue("2");
+        omgMsg.getORDER().getOBSERVATION().getOBX().getSetIDOBX().setValue("222");
 
         // patient name
-        refMsg.getPID().getPatientName(0).getGivenName().setValue("Xi");
-        refMsg.getPID().getPatientName(0).getFamilyName().getSurname().setValue("Jia");
+        omgMsg.getPATIENT().getPID().getPatientName(0).getGivenName().setValue("Xi");
+        omgMsg.getPATIENT().getPID().getPatientName(0).getFamilyName().getSurname().setValue("Jia");
 
         //dob
-        refMsg.getPID().getDateTimeOfBirth().setValue(new Date());
+        omgMsg.getPATIENT().getPID().getDateTimeOfBirth().setValue(new Date());
 
         // sex
-        refMsg.getPID().getAdministrativeSex().getText().setValue("M");
+        omgMsg.getPATIENT().getPID().getAdministrativeSex().getText().setValue("M");
 
         // country code
         // phone number
-        refMsg.getPID().getPhoneNumberHome(0).getTelephoneNumber().setValue("(003)060-0974");
+        omgMsg.getPATIENT().getPID().getPhoneNumberHome(0).getTelephoneNumber().setValue("(003)060-0974");
 
         // primary language
-        refMsg.getPID().getPrimaryLanguage().getText().setValue("EL");
-
-        // last updated
-        refMsg.getPID().getLastUpdateDateTime().setValue(new Date());
-
-        //insurance
-        refMsg.getRF1().getReferralStatus().getText().setValue("referral status");
-        IN1 in1 = refMsg.getINSURANCE().getIN1();
-        in1.getInsuranceCompanyName(0).getOrganizationName().setValue("insurance company name");
+        omgMsg.getPATIENT().getPID().getPrimaryLanguage().getText().setValue("EL");
 
 // The MessageSendable provides the message to send
-        ISendable sendable = new MessageSendable(refMsg);
+        ISendable sendable = new MessageSendable(omgMsg);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         OutputStreamWriter w = new OutputStreamWriter(bos, StandardCharsets.UTF_8);
         sendable.writeMessage(w);

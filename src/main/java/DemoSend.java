@@ -40,6 +40,12 @@ public class DemoSend {
             case "patientRaw":
                 SendPatientRaw.send(host, port, username, password);
                 break;
+            case "order":
+                SendOrder.send(host, port, username, password);
+                break;
+            case "orderRaw":
+                SendOrderRaw.send(host, port, username, password);
+                break;
             default:
                 System.out.println("Should specify a data");
                 break;

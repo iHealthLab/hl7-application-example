@@ -29,7 +29,7 @@ public class SendOBX {
         }else{
             host = url;
         }
-        String uri = "/hl7/observation";
+        String uri = "/hl7/servlet";
 
 // Create a parser
         Parser parser = PipeParser.getInstanceWithNoValidation();

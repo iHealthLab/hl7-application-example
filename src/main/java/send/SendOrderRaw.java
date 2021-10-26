@@ -21,7 +21,7 @@ public class SendOrderRaw {
         }else{
             host = url;
         }
-        String uri = "/hl7/nonHapi";
+        String uri = "/hl7/rawServlet";
 
 // Create a parser
         Parser parser = PipeParser.getInstanceWithNoValidation();
@@ -39,10 +39,10 @@ public class SendOrderRaw {
 
 // The ISendable defines the object that provides the actual
 // message to send
-        String message = "MSH|^~&#|||||20210825144232.713+0800||REF^I12^REF_I12|15701|blahblah|2.8.1\r" +
-                "PID|1||123||Jia^Xi||20210825163701.895+0800|^M|||||(003)060-0974||^EL||||||||||||||||||20210825163701.898+0800\r" +
-                "ORC|NW|RQ101^ORSUPPLY||||N|||20061105130000||333-77-7777^COMRAD^CONNOR^C|999-99-9999^VERIFY^VIRGIL^V|MAINOR^2W|321-1234 X2304^^^^^^3211234^2304|\r"+
-                "RQD|1|1234^Solution, 2.25% Saline||S1786^Saline Solution|1|BT^Bottle|1234-5678||ORSUP^Main OR Supply Room|20061123|\r";
+        String message = "MSH|^~\\&#||RIH|||20211025115337.934+0800||ORU^R01^ORU_R01|140601|P|2.8\r" +
+                "PID|||aaa\r" +
+                "OBR|\r" +
+                "OBX|1|ST|AS4-1002.3^BP DIASTOLIC|1|^80|^mol||||||||20211025115337.955+0800\r";
 
         ISendable<String> sendable = new RawSendable(message);
 

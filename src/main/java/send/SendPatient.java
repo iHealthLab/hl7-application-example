@@ -50,6 +50,7 @@ public class SendPatient {
 
         // patient id
         refMsg.getPID().getSetIDPID().setValue("1");
+        refMsg.getPID().getPatientIdentifierList(0).getIDNumber().setValue("aaabbb");
 
         // patient name
         refMsg.getPID().getPatientName(0).getGivenName().setValue("Xi");

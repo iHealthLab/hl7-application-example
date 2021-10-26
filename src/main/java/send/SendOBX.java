@@ -52,6 +52,7 @@ public class SendOBX {
 
         MSH msh = oru.getMSH();
         msh.getSendingFacility().getNamespaceID().setValue("RIH");
+        oru.getPATIENT_RESULT().getPATIENT().getPID().getPatientIdentifierList(0).getIDNumber().setValue("aaa");
 
         /*
          * The OBR segment is contained within a group called ORDER_OBSERVATION,

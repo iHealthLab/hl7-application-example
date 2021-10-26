@@ -44,6 +44,7 @@ public class SendOrder {
         OMG_O19 omgMsg = new OMG_O19();
         omgMsg.initQuickstart("OMG","O19","");
         omgMsg.getPATIENT().getPID().getSetIDPID().setValue("1");
+        omgMsg.getPATIENT().getPID().getPatientIdentifierList(0).getIDNumber().setValue("aaabbbccc");
 
         omgMsg.getORDER().getORC().getOrc1_OrderControl().setValue("NW");
         omgMsg.getORDER().getORC().getPlacerOrderNumber().getEntityIdentifier().setValue("RQ101");

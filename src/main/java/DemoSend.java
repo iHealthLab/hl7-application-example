@@ -10,9 +10,9 @@ public class DemoSend {
     int port = 443;
     @Parameter(names={"--messageType"}, required = true, description="The message type to send to server")
     String messageType;
-    @Parameter(names={"--username", "-u"}, required = true, description="The username to verify identity")
+    @Parameter(names={"--username", "-u"}, description="The username to verify identity")
     String username;
-    @Parameter(names={"--password", "-p"}, required = true, description="The password for username to verify identity")
+    @Parameter(names={"--password", "-p"}, description="The password for username to verify identity")
     String password;
     @Parameter(names = "--help", help = true)
     private boolean help;
@@ -45,6 +45,12 @@ public class DemoSend {
                 break;
             case "orderRaw":
                 SendOrderRaw.send(host, port, username, password);
+                break;
+            case "ehn":
+                SendOBX.send(host, port);
+                break;
+            case "ehnRaw":
+                SendOrderRaw.send(host, port);
                 break;
             default:
                 System.out.println("Should specify a data");

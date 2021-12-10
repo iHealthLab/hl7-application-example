@@ -110,4 +110,60 @@ public class SendOBX {
         // Thrown if the message can't be encoded (generally a programming bug)
 
     }
+
+    public static void send(String url, int port) throws Exception {
+
+        // Create a parser
+        Parser parser = PipeParser.getInstanceWithNoValidation();
+
+        // Create a client
+        HohClientSimple client = new HohClientSimple(url, port, "/", parser);
+        if (url.startsWith("https://")) {
+            client.setSocketFactory(new TlsSocketFactory());
+        }
+
+        ORU_R01 oru = new ORU_R01();
+        oru.initQuickstart("ORU", "R01", "P");
+
+        MSH msh = oru.getMSH();
+        msh.getSendingFacility().getNamespaceID().setValue("RIH");
+        oru.getPATIENT_RESULT().getPATIENT().getPID().getPatientIdentifierList(0).getIDNumber().setValue("aaa");
+
+        ORU_R01_ORDER_OBSERVATION orderObservation = oru.getPATIENT_RESULT().getORDER_OBSERVATION();
+
+        ORU_R01_OBSERVATION observation = orderObservation.getOBSERVATION(0);
+
+        OBX obx = observation.getOBX();
+        obx.getSetIDOBX().setValue("1");
+        obx.getValueType().setValue("ST");
+        obx.getObservationIdentifier().getIdentifier().setValue("AS4-1002.3");
+        obx.getObservationIdentifier().getText().setValue("BP DIASTOLIC");
+
+
+        obx.getObservationSubID().setValue("1");
+
+        CWE cwe = new CWE(oru);
+        cwe.getText().setValue("90");
+        obx.getObservationValue(0).setData(cwe);
+        obx.getDateTimeOfTheObservation().setValue(new Date());
+
+        ISendable<Message> sendable = new MessageSendable(oru);
+        System.out.println("sendable: " + oru);
+
+        try {
+            // sendAndReceive actually sends the message
+            IReceivable<Message> receivable = client.sendAndReceiveMessage(sendable);
+
+            Message message = receivable.getMessage();
+            System.out.println("Response was:\n" + message.encode());
+
+        } catch (DecodeException | IOException | EncodeException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+//    public static void main(String[] args) throws Exception {
+//        send("192.0.0.110", 2575);
+//    }
 }

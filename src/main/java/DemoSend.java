@@ -7,7 +7,7 @@ public class DemoSend {
     @Parameter(names={"--host"}, required = true, description="The host url for HL7 server")
     String host;
     @Parameter(names={"--port"}, description="The port for HL7 server")
-    int port = 443;
+    int port = 20002;
     @Parameter(names={"--messageType"}, required = true, description="The message type to send to server")
     String messageType;
     @Parameter(names={"--username", "-u"}, description="The username to verify identity")
@@ -51,6 +51,12 @@ public class DemoSend {
                 break;
             case "ehnRaw":
                 SendOrderRaw.send(host, port);
+                break;
+            case "ehn2":
+                Send2EHN.send();
+                break;
+            case "ehn1":
+                SimpleMLLPBasedTCPClient.send();
                 break;
             default:
                 System.out.println("Should specify a data");

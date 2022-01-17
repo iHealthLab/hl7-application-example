@@ -162,8 +162,8 @@ public class SendOBX {
         }
 
     }
-
+//
 //    public static void main(String[] args) throws Exception {
-//        send("192.0.0.110", 2575);
+//        send("https://dev-hl7.ihealth-eng.com", 443);
 //    }
 }

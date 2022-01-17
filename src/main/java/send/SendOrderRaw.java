@@ -46,7 +46,7 @@ public class SendOrderRaw {
 
 // The ISendable defines the object that provides the actual
 // message to send
-        String message = "MSH|^~\\&#||RIH|||20211025115337.934+0800||ORU^R01^ORU_R01|140601|P|2.8\r" +
+        String message = "MSH|^~\\&||RIH|||20211025115337.934+0800||ORU^R01^ORU_R01|140601|P|2.8\r" +
                 "PID|||aaa\r" +
                 "OBR|\r" +
                 "OBX|1|ST|AS4-1002.3^BP DIASTOLIC|1|^80|^mol||||||||20211025115337.955+0800\r";
@@ -80,7 +80,8 @@ public class SendOrderRaw {
 //                "PID|0001|00009874|00001122|A00977|SMITH^JOHN^M|MOM|19581119|F|NOTREAL^LINDA^M|C|564 SPRING ST^^NEEDHAM^MA^02494^US|0002|(818)565-1551|(425)828-3344|E|S|C|0000444444|252-00-4414||||SA|||SA||||NONE|V1|0001|I|D.ER^50A^M110^01|ER|P00055|11B^M011^02|070615^BATMAN^GEORGE^L|555888^NOTREAL^BOB^K^DR^MD|777889^NOTREAL^SAM^T^DR^MD^PHD|ER|D.WT^1A^M010^01|||ER|AMB|02|070615^NOTREAL^BILL^L|ER|000001916994|D||||||||||||||||GDD|WA|NORM|02|O|02|E.IN^02D^M090^01|E.IN^01D^M080^01|199904072124|199904101200|199904101200||||5555112333|||666097^NOTREAL^MANNY^P\r" +
 //                "OBR|\r" +
 //                "OBX|1|ST|AS4-1002.3^BP DIASTOLIC|1|^80|^mol||||||||20211025115337.955+0800\r";
-        String message = "MSH|^~\\&||RIH|||20211125115337.934+0800||ORU^R01^ORU_R01|140601|P|2.8\r" +
+        String message = "MSH|^~\\&||RIH|||20211125115337.934+0800||ORU^R01^ORU_R01|140601|P|2.3\r" +
+                "EVN|R01|20210805160715\r" +
                 "PID|||aaa\r" +
                 "OBR|\r" +
                 "OBX|1|ST|AS4-1002.3^BP DIASTOLIC|1|^80|^mol||||||||20211025115337.955+0800\r";
@@ -97,11 +98,11 @@ public class SendOrderRaw {
             IReceivable<String> receivable = client.sendAndReceive(sendable);
 
             // receivavle.getRawMessage() provides the response
-            System.out.println("Response was:\n" + receivable.getMessage());
+            System.out.println("Response was:\n" + receivable);
 
             // IReceivable also stores metadata about the message
-            String remoteHostIp = (String) receivable.getMetadata().get(MessageMetadataKeys.REMOTE_HOST_ADDRESS);
-            System.out.println("From:\n" + remoteHostIp);
+//            String remoteHostIp = (String) receivable.getMetadata().get(MessageMetadataKeys.REMOTE_HOST_ADDRESS);
+//            System.out.println("From:\n" + remoteHostIp);
         } catch (DecodeException | IOException | EncodeException e) {
             e.printStackTrace();
         }

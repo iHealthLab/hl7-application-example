@@ -21,7 +21,7 @@ public class SendPatientRaw {
         }else{
             host = url;
         }
-        String uri = "/hl7/rawServlet";
+        String uri = "/hl7/servlet";
 
 // Create a parser
         Parser parser = PipeParser.getInstanceWithNoValidation();

@@ -1,5 +1,6 @@
 package send;
 
+import ca.uhn.hl7v2.app.Connection;
 import ca.uhn.hl7v2.hoh.api.*;
 import ca.uhn.hl7v2.hoh.auth.SingleCredentialClientCallback;
 import ca.uhn.hl7v2.hoh.hapi.api.MessageSendable;
@@ -14,6 +15,13 @@ import ca.uhn.hl7v2.model.v28.segment.MSH;
 import ca.uhn.hl7v2.model.v28.segment.OBX;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.parser.PipeParser;
+import ca.uhn.hl7v2.DefaultHapiContext;
+import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.app.Connection;
+import ca.uhn.hl7v2.app.Initiator;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.v24.message.ADT_A01;
+import ca.uhn.hl7v2.parser.Parser;
 
 import java.io.IOException;
 import java.util.Date;
@@ -117,10 +125,8 @@ public class SendOBX {
         Parser parser = PipeParser.getInstanceWithNoValidation();
 
         // Create a client
-        HohClientSimple client = new HohClientSimple(url, port, "/", parser);
-        if (url.startsWith("https://")) {
-            client.setSocketFactory(new TlsSocketFactory());
-        }
+        HohClientSimple client = new HohClientSimple(url, port, "/hl7/servlet", parser);
+        client.setSocketFactory(new TlsSocketFactory());
 
         ORU_R01 oru = new ORU_R01();
         oru.initQuickstart("ORU", "R01", "P");
@@ -162,8 +168,63 @@ public class SendOBX {
         }
 
     }
+
+    public static void sendMLLP(String url, int port) throws Exception {
+
+        ORU_R01 oru = new ORU_R01();
+        oru.initQuickstart("ORU", "R01", "P");
+
+        MSH msh = oru.getMSH();
+        msh.getSendingFacility().getNamespaceID().setValue("RIH");
+        oru.getPATIENT_RESULT().getPATIENT().getPID().getPatientIdentifierList(0).getIDNumber().setValue("aaa");
+
+        ORU_R01_ORDER_OBSERVATION orderObservation = oru.getPATIENT_RESULT().getORDER_OBSERVATION();
+
+        ORU_R01_OBSERVATION observation = orderObservation.getOBSERVATION(0);
+
+        OBX obx = observation.getOBX();
+        obx.getSetIDOBX().setValue("1");
+        obx.getValueType().setValue("ST");
+        obx.getObservationIdentifier().getIdentifier().setValue("AS4-1002.3");
+        obx.getObservationIdentifier().getText().setValue("BP DIASTOLIC");
+
+
+        obx.getObservationSubID().setValue("1");
+
+        CWE cwe = new CWE(oru);
+        cwe.getText().setValue("90");
+        obx.getObservationValue(0).setData(cwe);
+        obx.getDateTimeOfTheObservation().setValue(new Date());
+
+        try {
+            // sendAndReceive actually sends the message
+
+            // create a new MLLP client over the specified port
+            HapiContext context = new DefaultHapiContext();
+            Connection connection = context.newClient(url, port, false);
+
+            // The initiator which will be used to transmit our message
+            Initiator initiator = connection.getInitiator();
+
+            // send the previously created HL7 message over the connection established
+            Parser parser = context.getPipeParser();
+
+            System.out.println("Sending message:" + "\n" + parser.encode(oru));
+            Message response = initiator.sendAndReceive(oru);
+            String responseString = parser.encode(response);
+            System.out.println("Received response:\n" + responseString);
+            connection.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 //
 //    public static void main(String[] args) throws Exception {
-//        send("https://dev-hl7.ihealth-eng.com", 443);
+//        sendMLLP();
+////        send("https://dev-hl7.ihealth-eng.com", 443);
 //    }
 }

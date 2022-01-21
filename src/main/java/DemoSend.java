@@ -46,8 +46,14 @@ public class DemoSend {
             case "orderRaw":
                 SendOrderRaw.send(host, port, username, password);
                 break;
-            case "ehn":
+            case "hoh":
                 SendOBX.send(host, port);
+                break;
+            case "mllp":
+                SendOBX.sendMLLP(host, port);
+                break;
+            case "adt":
+                SendADTMLLP.send(host, port);
                 break;
             case "ehnRaw":
                 SendOrderRaw.send(host, port);

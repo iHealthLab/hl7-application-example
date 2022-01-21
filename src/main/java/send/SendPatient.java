@@ -37,8 +37,8 @@ public class SendPatient {
             client.setSocketFactory(new TlsSocketFactory());
         }
 
-        IAuthorizationClientCallback authCallback = new SingleCredentialClientCallback(username, password);
-        client.setAuthorizationCallback(authCallback);
+//        IAuthorizationClientCallback authCallback = new SingleCredentialClientCallback(username, password);
+//        client.setAuthorizationCallback(authCallback);
 
         REF_I12 refMsg = new REF_I12();
 

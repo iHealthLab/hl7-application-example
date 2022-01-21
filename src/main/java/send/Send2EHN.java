@@ -11,7 +11,7 @@ public class Send2EHN {
     public static void send() throws IOException {
 
         // Create a socket to connect to server running locally on port 1080
-        Socket socket = new Socket("ihealth-oru-lab-listener.stage-ehnusa.net", 2575);
+        Socket socket = new Socket("20.0.0.27", 20003);
         System.out.println("Connected to Server");
 
         StringBuffer testHL7MessageToTransmit = new StringBuffer();

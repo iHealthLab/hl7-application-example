@@ -21,7 +21,7 @@ public class SendPatientRaw {
         }else{
             host = url;
         }
-        String uri = "/hl7/rawServlet";
+        String uri = "/hl7/servlet";
 
 // Create a parser
         Parser parser = PipeParser.getInstanceWithNoValidation();
@@ -34,8 +34,8 @@ public class SendPatientRaw {
 
 // Optionally, if credentials should be sent, they
 // can be provided using a credential callback
-        IAuthorizationClientCallback authCallback = new SingleCredentialClientCallback(username, password);
-        client.setAuthorizationCallback(authCallback);
+//        IAuthorizationClientCallback authCallback = new SingleCredentialClientCallback(username, password);
+//        client.setAuthorizationCallback(authCallback);
 
 // The ISendable defines the object that provides the actual
 // message to send

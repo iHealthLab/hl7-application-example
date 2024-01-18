@@ -96,6 +96,11 @@
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v24</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-structures-v28</artifactId>
             <version>2.3</version>
         </dependency>
